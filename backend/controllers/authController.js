@@ -19,13 +19,14 @@ export const registerUser = async (req, res) => {
       name,
       email,
       password: hashedPassword,
+      role:  "user",
     });
 
     await newUser.save();
 
     // ✅ ALWAYS read process.env.JWT_SECRET here, NOT top-level.
     const token = jwt.sign(
-      { userId: newUser._id },
+      { userId: newUser._id, role: newUser.role  },
       process.env.JWT_SECRET,
       { expiresIn: "2h" }
     );
@@ -57,7 +58,7 @@ export const loginUser = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { userId: user._id },
+      { userId: user._id, role: newUser.role  },
       process.env.JWT_SECRET,
       { expiresIn: "2h" }
     );

@@ -1,5 +1,6 @@
 import Invoice from "../models/Invoice.js";
 import nodemailer from "nodemailer";
+import PDFDocument from "pdfkit";
 
 export const createInvoice = async (req, res) => {
     console.log("API Hit")
@@ -182,3 +183,58 @@ export const markAsUnpaid = async (req, res) => {
   }
 };
 
+
+
+export const generateInvoicePDF = async (req, res) => {
+  try {
+    const invoice = await Invoice.findOne({
+      _id: req.params.id,
+      user: req.user.userId,
+    });
+
+    if (!invoice) {
+      return res.status(404).json({ error: "Invoice not found or unauthorized" });
+    }
+
+    const doc = new PDFDocument({ margin: 50 });
+
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", `inline; filename=invoice_${invoice._id}.pdf`);
+
+    doc.pipe(res);
+
+    // === PDF Content ===
+    doc.fontSize(22).text("Invoice", { align: "center" });
+    doc.moveDown();
+
+    doc.fontSize(14).text(`Client: ${invoice.clientName}`);
+    doc.text(`Email: ${invoice.clientEmail}`);
+    doc.text(`Status: ${invoice.status}`);
+    doc.text(`Date: ${new Date(invoice.createdAt).toLocaleDateString()}`);
+    doc.moveDown();
+
+    doc.fontSize(16).text("Items:");
+    invoice.items.forEach((item, i) => {
+      doc.text(
+        `${i + 1}. ${item.description} — ${item.quantity} × ₹${item.rate} = ₹${item.quantity * item.rate}`
+      );
+    });
+
+    doc.moveDown();
+    doc.fontSize(16).text(`Total Amount: ₹${invoice.totalAmount}`, { bold: true });
+
+    doc.end();
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to generate PDF" });
+  }
+};
+
+export const getAllInvoicesAdmin = async (req, res) => {
+  try {
+    const invoices = await Invoice.find().sort({ createdAt: -1 });
+    res.json(invoices);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
