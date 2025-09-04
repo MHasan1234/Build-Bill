@@ -10,7 +10,8 @@ import {
   markAsPaid,
   markAsUnpaid,
   generateInvoicePDF,
-    getAllInvoicesAdmin 
+    getAllInvoicesAdmin ,
+    getDashboardStats
 } from "../controllers/InvoiceController.js";
 
 import { protect,  requireRole } from "../middleware/auth.js";
@@ -18,10 +19,13 @@ import { protect,  requireRole } from "../middleware/auth.js";
 
 const router = express.Router();
 
+router.get("/dashboard", protect, getDashboardStats);
 
 router.post("/",  protect,  createInvoice);
 router.get("/", protect,  getAllInvoices);
 router.get("/all-invoices", protect, requireRole("admin"), getAllInvoicesAdmin);
+
+
 
 router.get("/:id", protect,  getInvoiceById);
 
@@ -33,6 +37,7 @@ router.put("/:id/status", protect, markAsPaid);
 router.put("/:id/status/unpaid", protect, markAsUnpaid);
 
 router.get("/:id/pdf", protect, generateInvoicePDF);
+
 
 
 

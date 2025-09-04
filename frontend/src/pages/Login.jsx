@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
@@ -7,8 +7,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
-  const { login } = useAuth();  // from AuthContext
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -26,56 +25,50 @@ export default function Login() {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.message || data.error || "Login failed");
-        setLoading(false);
-        return;
+        throw new Error(data.message || "Login failed");
       }
-
-      // ✅ store token & user
+      
       login(data.user, data.token);
-
-      // ✅ redirect to dashboard
       navigate("/dashboard");
     } catch (err) {
-      console.error("Login error:", err);
-      setError("Network error. Please try again.");
+      setError(err.message);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div style={{ maxWidth: 420, margin: "40px auto", padding: 20 }}>
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <label style={{ display: "block", marginTop: 12 }}>Email</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          style={{ width: "100%", padding: 8 }}
-        />
-
-        <label style={{ display: "block", marginTop: 12 }}>Password</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          style={{ width: "100%", padding: 8 }}
-        />
-
-        <button
-          type="submit"
-          disabled={loading}
-          style={{ marginTop: 18, padding: "10px 14px" }}
-        >
-          {loading ? "Logging in..." : "Login"}
-        </button>
-
-        {error && <div style={{ color: "red", marginTop: 10 }}>{error}</div>}
-      </form>
+    <div className="container" style={{ maxWidth: 450 }}>
+      <div className="card">
+        <h2>Login</h2>
+        <form onSubmit={handleSubmit}>
+          <div>
+            <label>Email</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <label>Password</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <button type="submit" className="btn-primary" disabled={loading}>
+            {loading ? "Logging in..." : "Login"}
+          </button>
+          {error && <div className="error-message">{error}</div>}
+        </form>
+        <p style={{ textAlign: 'center', marginTop: '1rem' }}>
+          Don't have an account? <Link to="/register">Register here</Link>
+        </p>
+      </div>
     </div>
   );
 }

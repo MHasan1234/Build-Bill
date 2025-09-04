@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import './Dashboard.css'; // We'll create this CSS file
 
 export default function Dashboard() {
-  const { user, token, logout } = useAuth();
+  const { user, token } = useAuth();
   const [stats, setStats] = useState(null);
   const [error, setError] = useState(null);
 
@@ -14,14 +15,10 @@ export default function Dashboard() {
             "Authorization": `Bearer ${token}`,
           },
         });
-
         const data = await res.json();
-
         if (!res.ok) {
-          setError(data.message || "Failed to fetch stats");
-          return;
+          throw new Error(data.message || "Failed to fetch stats");
         }
-
         setStats(data);
       } catch (err) {
         setError("Network error, try again later");
@@ -34,31 +31,36 @@ export default function Dashboard() {
   }, [token]);
 
   if (error) {
-    return <div style={{ padding: 20, color: "red" }}>⚠️ {error}</div>;
+    return <div className="container error-message">⚠️ {error}</div>;
   }
 
   if (!stats) {
-    return <div style={{ padding: 20 }}>Loading dashboard...</div>;
+    return <div className="container">Loading dashboard...</div>;
   }
 
   return (
-    <div style={{ maxWidth: 600, margin: "40px auto", padding: 20 }}>
+    <div className="container">
       <h2>Welcome, {user?.name}</h2>
       <h3>📊 Your Invoice Summary</h3>
-
-      <ul style={{ listStyle: "none", padding: 0 }}>
-        <li>Total Invoices: {stats.totalInvoices}</li>
-        <li>Paid Invoices: {stats.paidInvoices}</li>
-        <li>Unpaid Invoices: {stats.unpaidInvoices}</li>
-        <li>Total Income: ₹{stats.totalIncome}</li>
-      </ul>
-
-      <button 
-        onClick={logout}
-        style={{ marginTop: 20, padding: "10px 14px" }}
-      >
-        Logout
-      </button>
+      
+      <div className="stats-grid">
+        <div className="stat-card">
+          <h4>Total Invoices</h4>
+          <p>{stats.totalInvoices}</p>
+        </div>
+        <div className="stat-card">
+          <h4>Paid Invoices</h4>
+          <p>{stats.paidInvoices}</p>
+        </div>
+        <div className="stat-card">
+          <h4>Unpaid Invoices</h4>
+          <p>{stats.unpaidInvoices}</p>
+        </div>
+        <div className="stat-card">
+          <h4>Total Income</h4>
+          <p>₹{stats.totalIncome.toFixed(2)}</p>
+        </div>
+      </div>
     </div>
   );
 }

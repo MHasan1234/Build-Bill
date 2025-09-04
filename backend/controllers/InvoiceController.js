@@ -17,14 +17,25 @@ export const createInvoice = async (req, res) => {
 };
 
 export const getAllInvoices = async (req, res) => {
-
   try {
-    const invoices = await Invoice.find({ user: req.user.userId }).sort({ createdAt: -1 });
-  res.json(invoices);
+    const { status, search } = req.query;
+    let query = { user: req.user.userId };
+
+    // Add status to query if it exists and is valid
+    if (status && ['Paid', 'Unpaid'].includes(status)) {
+      query.status = status;
+    }
+
+    // Add clientName search to query if it exists
+    if (search) {
+      query.clientName = { $regex: search, $options: 'i' }; // 'i' for case-insensitive
+    }
+
+    const invoices = await Invoice.find(query).sort({ createdAt: -1 });
+    res.json(invoices);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
-  
 };
 
 export const getInvoiceById = async (req, res) => {
@@ -234,6 +245,45 @@ export const getAllInvoicesAdmin = async (req, res) => {
   try {
     const invoices = await Invoice.find().sort({ createdAt: -1 });
     res.json(invoices);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+export const getDashboardStats = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+
+    const totalInvoices = await Invoice.countDocuments({
+      user: userId
+    });
+
+    const paidInvoices = await Invoice.countDocuments({
+      user: userId,
+      status: "Paid"
+    });
+
+    const unpaidInvoices = await Invoice.countDocuments({
+      user: userId,
+      status: "Unpaid"
+    });
+
+    const invoices = await Invoice.find({ user: userId });
+    const totalIncome = invoices.reduce((sum, invoice) => {
+        if (invoice.status === 'Paid') {
+            return sum + invoice.totalAmount;
+        }
+        return sum;
+    }, 0);
+
+
+    res.json({
+      totalInvoices,
+      paidInvoices,
+      unpaidInvoices,
+      totalIncome
+    });
+
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
