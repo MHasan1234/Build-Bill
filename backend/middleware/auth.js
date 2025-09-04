@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-// ✅ Only read process.env.JWT_SECRET inside the function.
+// Only read process.env.JWT_SECRET inside the function.
 export const protect = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
