@@ -34,6 +34,13 @@ export default function Navbar() {
                    </Link>
                  </li>
               )}
+                {(user.role === 'user' || user.role === 'admin') && (
+                 <li className="nav-item">
+                   <Link to="/clients" className="nav-links accountant-link">
+                     Clients Panel
+                   </Link>
+                 </li>
+              )}
 
               <li className="nav-item">
                 <Link to="/dashboard" className="nav-links">Dashboard</Link>

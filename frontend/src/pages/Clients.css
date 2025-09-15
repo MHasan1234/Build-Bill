@@ -1,0 +1,31 @@
+.add-client-form {
+    margin-bottom: 2rem;
+}
+
+.form-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.client-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.client-item {
+    border: 1px solid var(--border-color);
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.client-item h4 {
+    margin: 0 0 0.5rem 0;
+}
+
+.client-item p {
+    margin: 0.25rem 0;
+    color: var(--secondary-color);
+}

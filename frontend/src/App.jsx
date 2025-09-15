@@ -14,6 +14,7 @@ import PrivateRoute from './components/PrivateRoute.jsx';
 import AdminRoute from './components/AdminRoute.jsx';
 import AccountantRoute from './components/AccountantRoute.jsx'; // Import AccountantRoute
 import Navbar from './components/Navbar.jsx';
+import Clients from './pages/Clients.jsx';
 
 function App() {
   return (
@@ -32,7 +33,7 @@ function App() {
             <Route path="/invoices" element={<PrivateRoute><Invoices /></PrivateRoute>} />
             <Route path="/invoices/new" element={<PrivateRoute><NewInvoice /></PrivateRoute>} />
             <Route path="/invoices/:id" element={<PrivateRoute><InvoiceDetails /></PrivateRoute>} />
-            
+            <Route path="/clients" element={<PrivateRoute><Clients /></PrivateRoute>} />
             {/* Admin Route */}
             <Route 
               path="/admin/dashboard" 
