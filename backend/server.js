@@ -8,6 +8,8 @@ import mongoose from "mongoose";
 import cors from "cors";
 import InvoiceRoutes from "./routes/InvoiceRoutes.js"
 import authRoutes from "./routes/authRoutes.js";
+import userRoutes from './routes/userRoutes.js';
+import reportRoutes from './routes/reportRoutes.js'; 
 
 
 
@@ -17,6 +19,8 @@ app.use(express.json());
 
 app.use("/api/invoices", InvoiceRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
+app.use('/api/reports', reportRoutes);
 
 const PORT = process.env.PORT || 5000;
 

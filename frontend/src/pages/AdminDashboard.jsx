@@ -1,65 +1,90 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import './AdminDashboard.css'; // New CSS for styling
 
 export default function AdminDashboard() {
-  const [invoices, setInvoices] = useState([]);
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { token } = useAuth();
 
+  const fetchUsers = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch("http://localhost:5000/api/users", {
+        headers: { "Authorization": `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error("Failed to fetch users");
+      const data = await res.json();
+      setUsers(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchAllInvoices = async () => {
-      try {
-        const res = await fetch("http://localhost:5000/api/invoices/all-invoices", {
-          headers: {
-            "Authorization": `Bearer ${token}`,
-          },
-        });
-
-        if (!res.ok) {
-          const data = await res.json();
-          throw new Error(data.message || "Failed to fetch all invoices");
-        }
-
-        const data = await res.json();
-        setInvoices(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     if (token) {
-      fetchAllInvoices();
+      fetchUsers();
     }
   }, [token]);
 
-  if (loading) {
-    return <div style={{ padding: 20 }}>Loading all invoices...</div>;
-  }
-
-  if (error) {
-    return <div style={{ padding: 20, color: "red" }}>⚠️ {error}</div>;
-  }
+  const handleRoleChange = async (userId, newRole) => {
+    try {
+      const res = await fetch(`http://localhost:5000/api/users/${userId}/role`, {
+        method: 'PUT',
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify({ role: newRole }),
+      });
+      if (!res.ok) throw new Error("Failed to update role");
+      // Refresh the user list to show the change
+      fetchUsers();
+    } catch (err) {
+      setError(err.message);
+    }
+  };
 
   return (
-    <div style={{ maxWidth: 900, margin: "40px auto", padding: 20 }}>
-      <h2>Admin Panel: All Invoices</h2>
-      {invoices.length === 0 ? (
-        <p>No invoices have been created by any user yet.</p>
-      ) : (
-        <ul style={{ listStyle: "none", padding: 0 }}>
-          {invoices.map((invoice) => (
-            <li key={invoice._id} style={{ border: "1px solid #ccc", padding: 15, marginBottom: 10, borderRadius: 5 }}>
-              <p><strong>Client:</strong> {invoice.clientName}</p>
-              <p><strong>Amount:</strong> ₹{invoice.totalAmount}</p>
-              <p><strong>Status:</strong> {invoice.status}</p>
-              <p><small><em>Invoice ID: {invoice._id}</em></small></p>
-            </li>
-          ))}
-        </ul>
-      )}
+    <div className="container">
+      <h2>Admin Panel: User Management</h2>
+
+      <div className="card">
+        {loading && <p>Loading users...</p>}
+        {error && <p className="error-message">{error}</p>}
+        {!loading && (
+          <table className="user-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+              </tr>
+            </thead>
+            <tbody>
+              {users.map((user) => (
+                <tr key={user._id}>
+                  <td>{user.name}</td>
+                  <td>{user.email}</td>
+                  <td>
+                    <select
+                      value={user.role}
+                      onChange={(e) => handleRoleChange(user._id, e.target.value)}
+                    >
+                      <option value="user">User</option>
+                      <option value="accountant">Accountant</option>
+                      <option value="admin">Admin</option>
+                    </select>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
     </div>
   );
 }

@@ -1,14 +1,23 @@
 import jwt from "jsonwebtoken";
 
-// Only read process.env.JWT_SECRET inside the function.
 export const protect = (req, res, next) => {
-  const authHeader = req.headers.authorization;
+  let token;
 
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res.status(401).json({ message: "No token, access denied" });
+  // First, check for the token in the standard Authorization header
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer ")
+  ) {
+    token = req.headers.authorization.split(" ")[1];
+  } 
+  // If not in the header, check for it in the URL query parameters (for PDF downloads)
+  else if (req.query.token) {
+    token = req.query.token;
   }
 
-  const token = authHeader.split(" ")[1];
+  if (!token) {
+    return res.status(401).json({ message: "No token, access denied" });
+  }
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -28,4 +37,3 @@ export const requireRole = (role) => {
     }
   };
 };
-

@@ -21,16 +21,14 @@ body {
 }
 
 #root {
-  padding-top: 80px; /* Add padding for the fixed navbar */
+  padding-top: 80px;
 }
 
-/* === Typography === */
 h1, h2, h3 {
   color: #343a40;
   margin-bottom: 0.5rem;
 }
 
-/* === Reusable Components === */
 .container {
   max-width: 900px;
   margin: 40px auto;
@@ -45,7 +43,6 @@ h1, h2, h3 {
   border: 1px solid var(--border-color);
 }
 
-/* === Forms === */
 form {
   display: flex;
   flex-direction: column;
@@ -57,10 +54,7 @@ form label {
   margin-bottom: -0.5rem;
 }
 
-input[type="text"],
-input[type="email"],
-input[type="password"],
-input[type="number"] {
+input, select {
   width: 100%;
   padding: 0.75rem;
   border: 1px solid var(--border-color);
@@ -69,4 +63,40 @@ input[type="number"] {
   box-sizing: border-box;
 }
 
-/* === Buttons === */
+button, .btn-primary, .btn-secondary, .btn-danger, .btn-success {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  color: white;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+}
+
+button:disabled {
+  background-color: var(--secondary-color);
+  cursor: not-allowed;
+}
+
+.btn-primary { background-color: var(--primary-color); }
+.btn-primary:hover { background-color: var(--primary-hover); }
+.btn-secondary { background-color: var(--secondary-color); }
+.btn-danger { background-color: var(--danger-color); }
+.btn-success { background-color: var(--success-color); }
+
+.error-message {
+  color: var(--danger-color);
+  margin-top: 1rem;
+}
+
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
