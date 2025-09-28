@@ -1,11 +1,9 @@
 import Invoice from '../models/Invoice.js';
 
-// @desc    Get all invoices for reporting
-// @route   GET /api/reports/invoices
-// @access  Accountant, Admin
+
 export const getAllInvoicesForReport = async (req, res) => {
     try {
-        // This is similar to the admin route, but can be expanded for more financial data later
+    
         const invoices = await Invoice.find({}).sort({ createdAt: -1 });
         res.json(invoices);
     } catch (err) {
@@ -13,9 +11,7 @@ export const getAllInvoicesForReport = async (req, res) => {
     }
 };
 
-// @desc    Generate a revenue summary for a date range
-// @route   POST /api/reports/revenue-summary
-// @access  Accountant, Admin
+
 export const getRevenueSummary = async (req, res) => {
     try {
         const { startDate, endDate } = req.body;
@@ -56,9 +52,7 @@ export const getRevenueSummary = async (req, res) => {
     }
 };
 
-// @desc    Export all invoices as a CSV file
-// @route   GET /api/reports/export/invoices-csv
-// @access  Accountant, Admin
+
 export const exportInvoicesToCSV = async (req, res) => {
     try {
         const invoices = await Invoice.find({}).populate('user', 'name email');

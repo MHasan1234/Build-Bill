@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import './Dashboard.css'; // We'll create this CSS file
+import './Dashboard.css'; 
 
 export default function Dashboard() {
   const { user, token } = useAuth();
@@ -31,7 +31,7 @@ export default function Dashboard() {
   }, [token]);
 
   if (error) {
-    return <div className="container error-message">⚠️ {error}</div>;
+    return <div className="container error-message"> {error}</div>;
   }
 
   if (!stats) {
@@ -41,7 +41,7 @@ export default function Dashboard() {
   return (
     <div className="container">
       <h2>Welcome, {user?.name}</h2>
-      <h3>📊 Your Invoice Summary</h3>
+      <h3>Your Invoice Summary</h3>
       
       <div className="stats-grid">
         <div className="stat-card">

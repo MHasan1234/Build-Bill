@@ -55,7 +55,7 @@
   font-weight: bold;
 }
 
-/* --- Start of Corrected Styles --- */
+
 .invoice-status {
   padding: 0.25rem 0.75rem;
   border-radius: 12px;
@@ -67,7 +67,7 @@
   text-align: center;
 }
 
-/* This is more specific and will override other background styles */
+
 .invoice-status.status-paid {
   background-color: var(--success-color);
 }
@@ -75,13 +75,13 @@
 .invoice-status.status-unpaid {
   background-color: var(--danger-color);
 }
-/* --- End of Corrected Styles --- */
+
 
 .invoice-actions a {
   font-weight: bold;
 }
 
-/* Media Query for responsiveness */
+
 @media screen and (max-width: 768px) {
   .invoices-header, .filters-container, .invoice-info, .invoice-card {
     flex-direction: column;

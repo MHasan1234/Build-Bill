@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import './NewInvoice.css'; // We'll add some styles for the new form
+import './NewInvoice.css'; 
 
 export default function NewInvoice() {
   const [clientName, setClientName] = useState("");
@@ -12,10 +12,31 @@ export default function NewInvoice() {
   const { token } = useAuth();
   const navigate = useNavigate();
 
+  const [clients, setClients] = useState([]);
+
+
+  useEffect(() => {
+    const fetchClients = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/clients", {
+          headers: { "Authorization": `Bearer ${token}` },
+        });
+        if (!res.ok) throw new Error("Could not fetch clients");
+        const data = await res.json();
+        setClients(data);
+      } catch (err) {
+        
+        console.error("Failed to fetch clients for dropdown:", err);
+      }
+    };
+    if (token) {
+      fetchClients();
+    }
+  }, [token]);
+
   const handleItemChange = (index, field, value) => {
     const newItems = [...items];
     newItems[index][field] = value;
-    // Reset hours if type is changed to Product
     if (field === 'type' && value === 'Product') {
       newItems[index].hours = 0;
     }
@@ -40,6 +61,17 @@ export default function NewInvoice() {
     }, 0);
   };
 
+  const handleClientSelect = (clientId) => {
+    const selectedClient = clients.find(c => c._id === clientId);
+    if (selectedClient) {
+      setClientName(selectedClient.name);
+      setClientEmail(selectedClient.email);
+    } else {
+      setClientName("");
+      setClientEmail("");
+    }
+  };
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
@@ -79,6 +111,22 @@ export default function NewInvoice() {
       <div className="card">
         <h2>Create New Invoice</h2>
         <form onSubmit={handleSubmit}>
+
+          <div className="form-group">
+            <label>Select Existing Client:</label>
+            <select 
+              onChange={(e) => handleClientSelect(e.target.value)} 
+              className="client-select"
+            >
+              <option value="">-- Or Enter Manually Below --</option>
+              {clients.map(client => (
+                <option key={client._id} value={client._id}>
+                  {client.name} ({client.email})
+                </option>
+              ))}
+            </select>
+          </div>
+
           <div className="form-row">
             <div className="form-group">
               <label>Client Name:</label>

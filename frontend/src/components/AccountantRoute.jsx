@@ -8,7 +8,7 @@ export default function AccountantRoute({ children }) {
         return <Navigate to="/login" replace />;
     }
 
-    // Allow access if the user is an accountant OR an admin
+    
     if (user?.role !== 'accountant' && user?.role !== 'admin') {
         return <Navigate to="/dashboard" replace />;
     }

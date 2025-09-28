@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import './AccountantDashboard.css'; // New CSS for styling
-
+import './AccountantDashboard.css'; 
 export default function AccountantDashboard() {
   const [invoices, setInvoices] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -50,8 +49,7 @@ export default function AccountantDashboard() {
   };
   
   const handleExportCSV = () => {
-    // We construct a link and click it to trigger the download.
-    // The token is passed as a query parameter for a simple auth method on a GET request.
+ 
     window.location.href = `http://localhost:5000/api/reports/export/invoices-csv?token=${token}`;
   };
 

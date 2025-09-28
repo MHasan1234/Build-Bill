@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import './AdminDashboard.css'; // New CSS for styling
+import './AdminDashboard.css'; 
 
 export default function AdminDashboard() {
   const [users, setUsers] = useState([]);
@@ -41,7 +41,7 @@ export default function AdminDashboard() {
         body: JSON.stringify({ role: newRole }),
       });
       if (!res.ok) throw new Error("Failed to update role");
-      // Refresh the user list to show the change
+    
       fetchUsers();
     } catch (err) {
       setError(err.message);

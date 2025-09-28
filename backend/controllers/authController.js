@@ -23,7 +23,7 @@ export const registerUser = async (req, res) => {
       { expiresIn: "2h" }
     );
     res.status(201).json({
-      // Ensure role is sent on register
+      
       user: { name: newUser.name, email: newUser.email, role: newUser.role },
       token,
     });
@@ -49,7 +49,7 @@ export const loginUser = async (req, res) => {
       { expiresIn: "2h" }
     );
     res.status(200).json({
-      // Ensure role is sent on login
+    
       user: { name: user.name, email: user.email, role: user.role },
       token,
     });

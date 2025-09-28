@@ -19,6 +19,9 @@
     padding: 1rem;
     border-radius: 8px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    display: flex; /* New */
+    justify-content: space-between; /* New */
+    align-items: center; /* New */
 }
 
 .client-item h4 {
@@ -28,4 +31,15 @@
 .client-item p {
     margin: 0.25rem 0;
     color: var(--secondary-color);
+}
+
+.client-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.form-buttons {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
 }

@@ -8,7 +8,7 @@ import { protect, requireRole } from '../middleware/auth.js';
 
 const router = express.Router();
 
-// Middleware to ensure only accountants or admins can access these routes
+
 const requireAccountantOrAdmin = (req, res, next) => {
     if (req.user && (req.user.role === 'accountant' || req.user.role === 'admin')) {
         return next();

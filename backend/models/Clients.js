@@ -12,7 +12,7 @@ const clientSchema = new mongoose.Schema({
   },
 }, { timestamps: true });
 
-// This ensures that a user cannot have two clients with the same email address
+
 clientSchema.index({ email: 1, user: 1 }, { unique: true });
 
 export default mongoose.model("Client", clientSchema);

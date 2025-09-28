@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import './Invoices.css'; // New CSS file for styling
+import './Invoices.css';
 
 export default function Invoices() {
   const [invoices, setInvoices] = useState([]);
@@ -9,14 +9,14 @@ export default function Invoices() {
   const [error, setError] = useState(null);
   const { token } = useAuth();
   
-  // New state for filtering and searching
-  const [statusFilter, setStatusFilter] = useState(''); // 'Paid', 'Unpaid', or '' for all
+  
+  const [statusFilter, setStatusFilter] = useState(''); 
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const fetchInvoices = async () => {
       setLoading(true);
-      // Build the query string based on filters
+      
       const params = new URLSearchParams();
       if (statusFilter) {
         params.append('status', statusFilter);
@@ -48,7 +48,7 @@ export default function Invoices() {
     if (token) {
       fetchInvoices();
     }
-  }, [token, statusFilter, searchTerm]); // Re-run effect when filters change
+  }, [token, statusFilter, searchTerm]); 
 
   return (
     <div className="container">

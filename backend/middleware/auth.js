@@ -3,14 +3,14 @@ import jwt from "jsonwebtoken";
 export const protect = (req, res, next) => {
   let token;
 
-  // First, check for the token in the standard Authorization header
+  
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer ")
   ) {
     token = req.headers.authorization.split(" ")[1];
   } 
-  // If not in the header, check for it in the URL query parameters (for PDF downloads)
+  
   else if (req.query.token) {
     token = req.query.token;
   }

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom"; 
 import { useAuth } from "../context/AuthContext";
-import './Clients.css'; // New CSS file for styling
+import './Clients.css';
 
 export default function Clients() {
   const [clients, setClients] = useState([]);
@@ -8,7 +9,6 @@ export default function Clients() {
   const [error, setError] = useState(null);
   const { token } = useAuth();
 
-  // State for the new client form
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -37,10 +37,9 @@ export default function Clients() {
     }
   }, [token]);
 
-  const handleSubmit = async (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     setFormError(null);
-
     try {
       const res = await fetch("http://localhost:5000/api/clients", {
         method: 'POST',
@@ -56,16 +55,20 @@ export default function Clients() {
         throw new Error(data.error || "Failed to add client");
       }
       
-      // Clear form and refresh client list
-      setName('');
-      setEmail('');
-      setPhone('');
-      setAddress('');
-      fetchClients(); // Refetch to show the new client
+      resetForm();
+      fetchClients();
 
     } catch (err) {
       setFormError(err.message);
     }
+  };
+
+  const resetForm = () => {
+    setName('');
+    setEmail('');
+    setPhone('');
+    setAddress('');
+    setFormError(null);
   };
 
   return (
@@ -74,7 +77,7 @@ export default function Clients() {
 
       <div className="card add-client-form">
         <h3>Add New Client</h3>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleFormSubmit}>
           <div className="form-row">
             <input type="text" placeholder="Client Name*" value={name} onChange={e => setName(e.target.value)} required />
             <input type="email" placeholder="Client Email*" value={email} onChange={e => setEmail(e.target.value)} required />
@@ -99,9 +102,16 @@ export default function Clients() {
             ) : (
               clients.map(client => (
                 <div key={client._id} className="client-item">
-                  <h4>{client.name}</h4>
-                  <p>{client.email}</p>
-                  <p>{client.phone}</p>
+                  <div>
+                    <h4>{client.name}</h4>
+                    <p>{client.email}</p>
+                    {client.phone && <p>{client.phone}</p>}
+                  </div>
+                  <div className="client-actions">
+                    <Link to={`/clients/${client._id}`} className="btn-secondary">
+                        View Details
+                    </Link>
+                  </div>
                 </div>
               ))
             )}

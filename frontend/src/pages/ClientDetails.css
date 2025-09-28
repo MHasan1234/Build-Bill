@@ -1,0 +1,39 @@
+.client-header {
+    margin-bottom: 2rem;
+    border-left: 5px solid var(--primary-color);
+}
+
+.client-header h2 {
+    margin-top: 0;
+}
+
+.client-header p {
+    margin: 0.25rem 0;
+    color: var(--secondary-color);
+}
+
+.invoices-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.invoice-card-small {
+  background: #fdfdfd;
+  padding: 1rem;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.invoice-info-small {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.invoice-actions-small a {
+  font-weight: bold;
+}

@@ -6,7 +6,7 @@ export default function InvoiceDetails() {
   const [invoice, setInvoice] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [emailStatus, setEmailStatus] = useState(''); // State for email feedback
+  const [emailStatus, setEmailStatus] = useState(''); 
   const { id } = useParams();
   const { token } = useAuth();
   const navigate = useNavigate();

@@ -20,6 +20,7 @@ export default function Navbar() {
         <ul className="nav-menu">
           {user ? (
             <>
+              
               {user.role === 'admin' && (
                 <li className="nav-item">
                   <Link to="/admin/dashboard" className="nav-links admin-link">
@@ -27,6 +28,8 @@ export default function Navbar() {
                   </Link>
                 </li>
               )}
+
+            
               {(user.role === 'accountant' || user.role === 'admin') && (
                  <li className="nav-item">
                    <Link to="/accountant/dashboard" className="nav-links accountant-link">
@@ -34,14 +37,8 @@ export default function Navbar() {
                    </Link>
                  </li>
               )}
-                {(user.role === 'user' || user.role === 'admin') && (
-                 <li className="nav-item">
-                   <Link to="/clients" className="nav-links accountant-link">
-                     Clients Panel
-                   </Link>
-                 </li>
-              )}
 
+            
               <li className="nav-item">
                 <Link to="/dashboard" className="nav-links">Dashboard</Link>
               </li>
@@ -49,11 +46,18 @@ export default function Navbar() {
                 <Link to="/invoices" className="nav-links">Invoices</Link>
               </li>
               <li className="nav-item">
+                <Link to="/clients" className="nav-links">
+                  Clients
+                </Link>
+              </li>
+              
+              <li className="nav-item">
                 <button onClick={handleLogout} className="nav-button">Logout</button>
               </li>
             </>
           ) : (
             <>
+            
               <li className="nav-item">
                 <Link to="/login" className="nav-links">Login</Link>
               </li>

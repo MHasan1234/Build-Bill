@@ -11,7 +11,9 @@ import {
   markAsUnpaid,
   generateInvoicePDF,
     getAllInvoicesAdmin ,
-    getDashboardStats
+    getDashboardStats,
+    getInvoicesByClient
+    
 } from "../controllers/InvoiceController.js";
 
 import { protect,  requireRole } from "../middleware/auth.js";
@@ -26,7 +28,7 @@ router.post("/",  protect,  createInvoice);
 router.get("/", protect,  getAllInvoices);
 router.get("/all-invoices", protect, requireRole("admin"), getAllInvoicesAdmin);
 
-
+router.get("/client/:clientName", protect, getInvoicesByClient);
 
 router.get("/:id", protect,  getInvoiceById);
 
