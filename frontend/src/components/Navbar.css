@@ -1,5 +1,5 @@
 .navbar {
-  background: #ffffff;
+  background: #1c1c1c;
   height: 80px;
   display: flex;
   justify-content: center;
@@ -42,6 +42,8 @@
 
 .nav-item {
   height: 80px;
+   display: flex;       
+  align-items: center;  
 }
 
 .nav-links {

@@ -49,7 +49,7 @@ export default function InvoiceDetails() {
   const handleSendEmail = async () => {
     setEmailStatus('Sending...');
     try {
-      const res = await fetch(`http://localhost:5000/api/invoices/${id}/send`, {
+      const res = await fetch(`http://localhost:5000/api/email/${id}/send`, {
         method: 'POST',
         headers: { "Authorization": `Bearer ${token}` },
       });
@@ -62,12 +62,12 @@ export default function InvoiceDetails() {
   };
 
   const handleDownloadPDF = () => {
-    window.open(`http://localhost:5000/api/invoices/${id}/pdf?token=${token}`, '_blank');
+    window.open(`http://localhost:5000/api/pdf/${id}/pdf?token=${token}`, '_blank');
   };
 
 
   if (loading) return <div className="container">Loading...</div>;
-  if (error) return <div className="container error-message">⚠️ {error}</div>;
+  if (error) return <div className="container error-message"> {error}</div>;
   if (!invoice) return <div className="container">Invoice not found.</div>;
 
   return (

@@ -1,18 +1,37 @@
 import User from '../models/User.js';
 import Invoice from '../models/Invoice.js';
-import mongoose from "mongoose";
+
 
 
 export const getAllUsers = async (req, res) => {
     try {
-        const users = await User.find({}).select('-password'); 
-        res.json(users);
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const search = req.query.search || '';
+
+        const query = {
+            $or: [
+                { name: { $regex: search, $options: 'i' } },
+                { email: { $regex: search, $options: 'i' } },
+            ],
+        };
+
+        const users = await User.find(query)
+            .select('-password')
+            .skip((page - 1) * limit)
+            .limit(limit);
+        
+        const totalUsers = await User.countDocuments(query);
+
+        res.json({
+            users,
+            totalPages: Math.ceil(totalUsers / limit),
+            currentPage: page,
+        });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
-};
-
-export const getUserById = async (req, res) => {
+};export const getUserById = async (req, res) => {
     try {
         const user = await User.findById(req.params.id).select('-password');
         if (!user) {
@@ -85,3 +104,12 @@ export const getSiteAnalytics = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
+export const getAllInvoicesAdmin = async (req, res) => {
+    try {
+      const invoices = await Invoice.find().sort({ createdAt: -1 });
+      res.json(invoices);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  };

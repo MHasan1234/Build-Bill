@@ -5,11 +5,12 @@
   --secondary-color: #6c757d;
   --danger-color: #dc3545;
   --success-color: #28a745;
-  --background-color: #f8f9fa;
-  --text-color: #333;
-  --card-bg: #ffffff;
-  --border-color: #dee2e6;
-  --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  /* --- DARK MODE CHANGES --- */
+  --background-color: #121212; /* Dark background */
+  --text-color: #e0e0e0;      /* Light text */
+  --card-bg: #1e1e1e;        /* Dark card background */
+  --border-color: #333333;     /* Darker border */
+  --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 body {
@@ -24,8 +25,9 @@ body {
   padding-top: 80px;
 }
 
+/* --- Update heading colors for dark mode --- */
 h1, h2, h3 {
-  color: #343a40;
+  color: #ffffff;
   margin-bottom: 0.5rem;
 }
 
@@ -34,6 +36,8 @@ h1, h2, h3 {
   margin: 40px auto;
   padding: 20px;
 }
+
+/* ... (the rest of your index.css file remains the same) ... */
 
 .card {
   background: var(--card-bg);
